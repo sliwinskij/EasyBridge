@@ -43,7 +43,7 @@ public class Main {
                     break;
                 case 2:
                     /*
-                    Initialize deck and players
+                    Initialize deck, players and teams
                      */
                     Deck deck = new Deck();
 
@@ -62,10 +62,12 @@ public class Main {
                     System.out.println("Enter player West name:");
                     name = scanner.nextLine();
                     Player player4 = new Player(name, deck, "W");
+                    Team team1 = new Team(player1,player3);
+                    Team team2 = new Team(player2,player4);
                     /*
                     Bidding Phase
                      */
-                    biddingPhase(player1,player2,player3,player4,random,scanner);
+                    biddingPhase(player1,player2,player3,player4,random,scanner,team1,team2);
 
                     break;
                 default:
@@ -74,58 +76,69 @@ public class Main {
         }
     }
 
-
     public static void printInstructions(){
         System.out.println("1. Quit");
         System.out.println("2. Start Game");
     }
 
-    public static void biddingPhase(Player player1, Player player2, Player player3, Player player4, Random random, Scanner scanner){
+    public static void biddingPhase(Player player1, Player player2, Player player3, Player player4, Random random, Scanner scanner,Team team1,Team team2){
         int chooseStartingPlayer = random.nextInt(4);
         Contract contract = new Contract();
         System.out.println("Bidding starts now!");
         while (true) {
-            playBid(player1, chooseStartingPlayer, contract, scanner,0);
+            playBid(player1, chooseStartingPlayer, contract, scanner,0,team1,team2);
             if (player3.isPass() && player4.isPass() && player1.isPass()){
                 System.out.println("Current contact: " + contract.getCurrentContract());
                 break;
             }
 
-            playBid(player2, chooseStartingPlayer, contract, scanner,1);
+            playBid(player2, chooseStartingPlayer, contract, scanner,1,team1,team2);
             if (player4.isPass() && player1.isPass() && player2.isPass()){
                 System.out.println("Current contact: " + contract.getCurrentContract());
                 break;
             }
 
 
-            playBid(player3, chooseStartingPlayer, contract, scanner,2);
+            playBid(player3, chooseStartingPlayer, contract, scanner,2,team1,team2);
             if (player1.isPass() && player2.isPass() && player3.isPass()){
                 System.out.println("Current contact: " + contract.getCurrentContract());
                 break;
             }
 
-            playBid(player4, chooseStartingPlayer, contract, scanner,3);
+            playBid(player4, chooseStartingPlayer, contract, scanner,3,team1,team2);
             if (player2.isPass() && player3.isPass() && player4.isPass()){
                 System.out.println("Current contact: " + contract.getCurrentContract());
                 break;
             }
         }
 
-        System.out.println("Whist player: " + contract.whoStartsTheGame() + ". Contract: " + contract.getCurrentContract() +
-                ", lefts to take: " + Contract.bidding.getSingleEnumByContractName(contract.getCurrentContract()).getCardsToWin() +
-                ", contract value: " + Contract.bidding.getSingleEnumByContractName(contract.getCurrentContract()).getContractValue());
+
+        System.out.println("Contract winners: " + (contract.getContractFlow().isEmpty() ? "N/A" : contract.getContractWinners(team1,team2)) +
+                ", Whist player: " + (contract.whoStartsTheGame()==null ? "N/A" : contract.whoStartsTheGame()) +
+                ", Contract: " + contract.getCurrentContract() +
+                ", lefts to take: " + (contract.getCurrentContract().equals("NO CONTRACT ACQUIRED!") ? "0" : Contract.bidding.getEnum(contract.getCurrentContract()).getCardsToWin()) +
+                ", contract value: " + (contract.getCurrentContract().equals("NO CONTRACT ACQUIRED!") ? "0" : Contract.bidding.getEnum(contract.getCurrentContract()).getContractValue()));
 
         System.out.println("Contract flow: " + contract.getContractFlow());
 
+
     }
 
-    public static void playBid(Player player, int chooseStartingPlayer, Contract contract, Scanner scanner, int number){
+    public static void playBid(Player player, int chooseStartingPlayer, Contract contract, Scanner scanner, int number,Team team1, Team team2){
         if (chooseStartingPlayer == number || contract.isContractStarted()) {
             System.out.println("Your Card's: " + player.getPlayersDeck());
             System.out.println(player.getName()  + " " + player.getDirection() + " choose your action: ");
             contract.showBiddingBoxMenu();
             int bidChoice = 0;
             boolean valid;
+            boolean oppositeTeamIsVersus = false;
+
+            if (team1.isPlayerInThisTeam(player)){
+                oppositeTeamIsVersus=team2.isVersus();
+            }
+            if (team2.isPlayerInThisTeam(player)){
+                oppositeTeamIsVersus=team1.isVersus();
+            }
 
             /*
             Choice validation
@@ -136,12 +149,21 @@ public class Main {
                     scanner.nextLine();
                     if (bidChoice >= 1 && bidChoice <= contract.getBiddingBox().size()){
                         valid = true;
-                    } else {
+                        if (bidChoice==2 && (team1.isVersus() || team2.isVersus() || contract.getContractFlow().size()==0)){
+                            System.out.println("You can't choose versus!");
+                            valid = false;
+                        }
+                        if (bidChoice==3 && (team1.isDoubleVersus() || team2.isDoubleVersus() || !oppositeTeamIsVersus || contract.getContractFlow().size()==0)){
+                            valid = false;
+                            System.out.println("You can't choose double versus!");
+                        }
+                    }
+                    else {
                         valid = false;
                         System.out.println("Enter a valid number!");
                     }
-
-                } else {
+                }
+                else {
                     scanner.nextLine();
                     valid = false;
                     System.out.println("Enter a valid number!");
@@ -154,13 +176,22 @@ public class Main {
                 contract.setCurrentContract(bidChoice,player);
                 contract.removeAllBidChoicesBeforeChosenOne(bidChoice);
                 player.setPass(false);
-            }else if (bidChoice==1){
-                player.setPass(true);
-            } else if (bidChoice==2){
-                player.setVersus(true);
-            } else if (bidChoice==3){
-                player.setDoubleVersus(true);
             }
+            else if (bidChoice==1){
+                player.setPass(true);
+            }
+            /*
+            These methods set Versus and Double Versus for both players with validation of team inside the method
+             */
+            else if (bidChoice==2){
+                team1.setVersus(player);
+                team2.setVersus(player);
+            }
+            else if (bidChoice==3){
+                team1.setDoubleVersus(player);
+                team2.setDoubleVersus(player);
+            }
+
             if (!contract.isContractStarted()){
                 contract.setContractStarted(true);
             }

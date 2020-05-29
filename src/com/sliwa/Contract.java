@@ -18,11 +18,13 @@ public class Contract {
             System.out.print(i+1 + ". " + biddingBox.get(i) + "\n");
         }
     }
+
     public void removeAllBidChoicesBeforeChosenOne(int number){
         if (number > 1) {
             biddingBox.subList(3, number).clear();
         }
     }
+
     public String getCurrentContract(){
         if (currentContract==null){
             return "NO CONTRACT ACQUIRED!";
@@ -33,13 +35,10 @@ public class Contract {
     public void setCurrentContract(int number,Player player) {
         currentContract = biddingBox.get(number-1);
         contractPlayer = player.getDirection();
-
-        int i = contractFlow.isEmpty()? 1 : contractFlow.size()+1;
-
         /*
         Flow of the current contract
          */
-
+        int i = contractFlow.isEmpty()? 1 : contractFlow.size()+1;
         contractFlow.add(i + "." + player.getDirection() + ": " + currentContract);
     }
 
@@ -70,6 +69,26 @@ public class Contract {
                 }
             }
         }
+        return null;
+    }
+
+    public String getContractWinners(Team team1,Team team2){
+        if (contractFlow.get(contractFlow.size()-1).startsWith(team1.getName().substring(0,1),2)){
+            return team1.getName();
+        }
+
+        if (contractFlow.get(contractFlow.size()-1).startsWith(team1.getName().substring(1),2)){
+            return team1.getName();
+        }
+
+        if (contractFlow.get(contractFlow.size()-1).startsWith(team2.getName().substring(0,1),2)){
+            return team2.getName();
+        }
+
+        if (contractFlow.get(contractFlow.size()-1).startsWith(team2.getName().substring(1),2)){
+            return team2.getName();
+        }
+
         return null;
     }
 
@@ -153,6 +172,7 @@ public class Contract {
         public int getContractValue(){
             return contractValue;
         }
+
         public String getContractName(){
             return name;
         }
@@ -169,7 +189,7 @@ public class Contract {
             ENUM_MAP = Collections.unmodifiableMap(map);
         }
 
-        public static bidding getSingleEnumByContractName (String name) {
+        public static bidding getEnum(String name) {
             return ENUM_MAP.get(name);
         }
 
