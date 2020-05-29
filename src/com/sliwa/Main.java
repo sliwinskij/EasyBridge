@@ -66,6 +66,7 @@ public class Main {
                     Bidding Phase
                      */
                     biddingPhase(player1,player2,player3,player4,random,scanner);
+
                     break;
                 default:
                     System.out.println("Enter a valid number!");
@@ -109,6 +110,13 @@ public class Main {
                 break;
             }
         }
+
+        System.out.println("Whist player: " + contract.whoStartsTheGame() + ". Contract: " + contract.getCurrentContract() +
+                ", lefts to take: " + Contract.bidding.getSingleEnumByContractName(contract.getCurrentContract()).getCardsToWin() +
+                ", contract value: " + Contract.bidding.getSingleEnumByContractName(contract.getCurrentContract()).getContractValue());
+
+        System.out.println("Contract flow: " + contract.getContractFlow());
+
     }
 
     public static void playBid(Player player, int chooseStartingPlayer, Contract contract, Scanner scanner, int number){

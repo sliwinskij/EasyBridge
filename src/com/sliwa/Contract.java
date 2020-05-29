@@ -7,7 +7,7 @@ public class Contract {
     private String currentContract;
     private boolean contractStarted = false;
     private String contractPlayer;
-    private final Map<String,ArrayList<String>> playersBidContract = new HashMap<>();
+    private final List<String> contractFlow = new ArrayList<>();
 
     public Contract() {
         this.biddingBox = createBiddingBox();
@@ -25,21 +25,52 @@ public class Contract {
     }
     public String getCurrentContract(){
         if (currentContract==null){
-            return "NO CONTRACT ACQUIRED";
+            return "NO CONTRACT ACQUIRED!";
         }
         return currentContract;
     }
 
     public void setCurrentContract(int number,Player player) {
         currentContract = biddingBox.get(number-1);
-        if (!playersBidContract.containsKey(player.getDirection())){
-            playersBidContract.put(player.getDirection(),new ArrayList<>());
-        }
-        playersBidContract.get(player.getDirection()).add(currentContract);
+        contractPlayer = player.getDirection();
+
+        int i = contractFlow.isEmpty()? 1 : contractFlow.size()+1;
+
+        /*
+        Flow of the current contract
+         */
+
+        contractFlow.add(i + "." + player.getDirection() + ": " + currentContract);
     }
 
-    public Map<String, ArrayList<String>> getPlayersBidContract() {
-        return playersBidContract;
+    public List<String> getContractFlow() {
+        return contractFlow;
+    }
+
+    public String whoStartsTheGame(){
+        /*
+        Determine the whist player: one to the left of first player to bid on colour in actual contract.
+         */
+
+        for (String flow : contractFlow){
+            if (contractPlayer.equals("N") || contractPlayer.equals("S")) {
+                if (flow.startsWith("N", 2) && flow.substring(6).equals(currentContract.substring(1))) {
+                    return "E";
+                }
+                if (flow.startsWith("S", 2) && flow.substring(6).equals(currentContract.substring(1))) {
+                    return "W";
+                }
+            }
+            if (contractPlayer.equals("E") || contractPlayer.equals("W")) {
+                if (flow.startsWith("E", 2) && flow.substring(6).equals(currentContract.substring(1))){
+                    return "S";
+                }
+                if (flow.startsWith("W", 2) && flow.substring(6).equals(currentContract.substring(1))){
+                    return "N";
+                }
+            }
+        }
+        return null;
     }
 
     public boolean isContractStarted() {

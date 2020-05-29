@@ -14,9 +14,4 @@ public class MainTest {
         System.out.println();
         System.out.println(player1.playerPoints());
     }
-    @Test
-    public void contractValue(){
-        System.out.println(Contract.bidding.getSingleEnumByContractName("1♣").getContractValue());
-
-    }
 }
