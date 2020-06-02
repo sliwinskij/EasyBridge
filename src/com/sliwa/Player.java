@@ -12,7 +12,7 @@ public class Player {
     private boolean pass = false;
 
 
-    public Player(final String name, final Deck deck, final String direction) {
+    public Player(String name, Deck deck, String direction) {
         this.name = name;
         this.playersDeck = dealCardsToPlayers(deck);
         Collections.sort(playersDeck);
@@ -23,7 +23,7 @@ public class Player {
         return pass;
     }
 
-    public void setPass(final boolean pass) {
+    public void setPass(boolean pass) {
         this.pass = pass;
     }
 
@@ -50,7 +50,7 @@ public class Player {
         return sum;
     }
 
-    private List<Deck.Card> dealCardsToPlayers(final Deck deck) {
+    private List<Deck.Card> dealCardsToPlayers(Deck deck) {
         Random random = new Random();
         List<Deck.Card> playersDeck = new ArrayList<>();
         for (int i = 0; i < 13; i++) {

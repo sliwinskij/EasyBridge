@@ -7,13 +7,13 @@ public class Team {
     private boolean versus = false;
     private boolean doubleVersus = false;
 
-    public Team(final Player player1, final Player player2) {
+    public Team(Player player1, Player player2) {
         this.player1 = player1;
         this.player2 = player2;
         this.name = player1.getDirection() + player2.getDirection();
     }
 
-    public boolean isPlayerInThisTeam(final Player player) {
+    public boolean isPlayerInThisTeam(Player player) {
         if (this.player1.getDirection().equals(player.getDirection())) {
             return true;
         }

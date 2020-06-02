@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(final String[] args) {
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
         boolean gameOn = true;
@@ -73,7 +73,7 @@ public class Main {
         System.out.println("2. Start Game");
     }
 
-    public static void biddingPhase(final Player playerN, final Player playerE, final Player playerS, final Player playerW, final Random random, final Scanner scanner, final Team teamNS, final Team teamEW) {
+    public static void biddingPhase(Player playerN, Player playerE, Player playerS, Player playerW, Random random, Scanner scanner, Team teamNS, Team teamEW) {
         int chooseStartingPlayer = random.nextInt(4);
         Contract contract = new Contract();
         System.out.println("Bidding starts now!");
@@ -119,7 +119,7 @@ public class Main {
                 + ", Whist player: " + (contract.getWhistPlayer() == null ? "N/A" : contract.getWhistPlayer())
                 + ", Contract: " + contract.getCurrentContract()
                 + ", lefts to take: " + (contract.getCurrentContract().equals("N/A") ? "0" : Contract.Bidding.getEnum(contract.getCurrentContract()).getCardsToWin())
-                + ", contract value: " + (contract.getCurrentContract().equals("N/A") ? "0" : Contract.Bidding.getEnum(contract.getCurrentContract()).getContractValue()));
+                + ", contract value: " + (contract.getCurrentContract().equals("N/A") ? "0" : contract.getActualContractValue(teamNS, teamEW)));
 
         System.out.println("Contract flow: " + contract.getContractFlow());
     }

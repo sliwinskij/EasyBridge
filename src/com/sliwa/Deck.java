@@ -25,7 +25,7 @@ public class Deck {
         private final int suitValue;
         private final String suitName;
 
-        CardSuits(final int suitValue, final String suitName) {
+        CardSuits(int suitValue, String suitName) {
             this.suitValue = suitValue;
             this.suitName = suitName;
         }
@@ -57,7 +57,7 @@ public class Deck {
         private final int cardValue;
         private final String cardName;
 
-        CardRanks(final int cardValue, final String cardName) {
+        CardRanks(int cardValue, String cardName) {
             this.cardValue = cardValue;
             this.cardName = cardName;
         }
@@ -86,7 +86,7 @@ public class Deck {
         private final CardSuits cardSuit;
         private final CardRanks cardRank;
 
-        public Card(final CardRanks cardRank, final CardSuits cardSuit) {
+        public Card(CardRanks cardRank, CardSuits cardSuit) {
             this.cardSuit = cardSuit;
             this.cardRank = cardRank;
         }
@@ -104,7 +104,7 @@ public class Deck {
         }
 
         @Override
-        public int compareTo(final Card card) {
+        public int compareTo(Card card) {
             return Integer.compare(card.getSuitValue()
                     + card.getRankValue(), this.getSuitValue() + this.getRankValue());
         }
