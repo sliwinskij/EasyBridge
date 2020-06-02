@@ -4,13 +4,15 @@ public class Team {
     private final Player player1;
     private final Player player2;
     private final String name;
-    private boolean versus = false;
-    private boolean doubleVersus = false;
+    private boolean versus;
+    private boolean doubleVersus;
 
     public Team(Player player1, Player player2) {
         this.player1 = player1;
         this.player2 = player2;
         this.name = player1.getDirection() + player2.getDirection();
+        this.versus = false;
+        this.doubleVersus = false;
     }
 
     public boolean isPlayerInThisTeam(Player player) {

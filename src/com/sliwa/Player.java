@@ -9,7 +9,7 @@ public class Player {
     private final String name;
     private final List<Deck.Card> playersDeck;
     private final String direction;
-    private boolean pass = false;
+    private boolean pass;
 
 
     public Player(String name, Deck deck, String direction) {
@@ -17,6 +17,7 @@ public class Player {
         this.playersDeck = dealCardsToPlayers(deck);
         Collections.sort(playersDeck);
         this.direction = direction;
+        this.pass = false;
     }
 
     public boolean isPass() {

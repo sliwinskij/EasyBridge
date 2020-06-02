@@ -8,15 +8,17 @@ public class Contract {
     private boolean contractStarted;
     private String contractPlayer;
     //All bids
-    private final List<String> contractFlow = new ArrayList<>();
+    private final List<String> contractFlow;
     //All bids except PASS, X, XX
-    private final List<String> biddingFlow = new ArrayList<>();
+    private final List<String> biddingFlow;
 
     public Contract() {
         this.biddingBox = createBiddingBox();
         this.currentContract = "N/A";
         this.contractStarted = false;
         this.contractPlayer = "";
+        this.contractFlow = new ArrayList<>();
+        this.biddingFlow = new ArrayList<>();
     }
 
     public boolean isContractStarted() {
@@ -180,8 +182,7 @@ public class Contract {
                 if (flow.startsWith("S", 2) && flow.substring(6).equals(currentContract.substring(1))) {
                     return "W";
                 }
-            }
-            if (contractPlayer.equals("E") || contractPlayer.equals("W")) {
+            } else if (contractPlayer.equals("E") || contractPlayer.equals("W")) {
                 if (flow.startsWith("E", 2) && flow.substring(6).equals(currentContract.substring(1))) {
                     return "S";
                 }
