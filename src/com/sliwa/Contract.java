@@ -5,8 +5,8 @@ import java.util.*;
 public class Contract {
     private final List<String> biddingBox;
     private String currentContract;
-    private boolean contractStarted = false;
-    private String contractPlayer = "";
+    private boolean contractStarted;
+    private String contractPlayer;
     //All bids
     private final List<String> contractFlow = new ArrayList<>();
     //All bids except PASS, X, XX
@@ -14,6 +14,9 @@ public class Contract {
 
     public Contract() {
         this.biddingBox = createBiddingBox();
+        this.currentContract = "N/A";
+        this.contractStarted = false;
+        this.contractPlayer = "";
     }
 
     public boolean isContractStarted() {
@@ -71,9 +74,6 @@ public class Contract {
     }
 
     public String getCurrentContract() {
-        if (currentContract == null) {
-            return "N/A";
-        }
         return currentContract;
     }
 
@@ -190,7 +190,7 @@ public class Contract {
                 }
             }
         }
-        return null;
+        return "N/A";
     }
 
     public String getContractWinners(Team teamNS, Team teamEW) {
@@ -206,7 +206,7 @@ public class Contract {
         if (contractPlayer.startsWith("W")) {
             return teamEW.getName();
         }
-        return null;
+        return "N/A";
     }
 
     private List<String> createBiddingBox() {
@@ -227,10 +227,17 @@ public class Contract {
             return Bidding.getEnum(currentContract).getContractDoubleVersusValue();
         } else if (teamNS.isVersus() || teamEW.isVersus()) {
             return Bidding.getEnum(currentContract).getContractVersusValue();
-        } else if (currentContract != null) {
+        } else if (!currentContract.equals("N/A")) {
             return Bidding.getEnum(currentContract).getContractValue();
         }
         return 0;
+    }
+
+    public int getCardsToWin() {
+        if (currentContract.equals("N/A")){
+            return 0;
+        }
+        return Bidding.getEnum(currentContract).getCardsToWin();
     }
 
     public enum Bidding {

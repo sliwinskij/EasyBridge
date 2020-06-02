@@ -115,11 +115,11 @@ public class Main {
             }
         }
 
-        System.out.println("Contract winners: " + (contract.getBiddingFlow().isEmpty() ? "N/A" : contract.getContractWinners(teamNS, teamEW))
-                + ", Whist player: " + (contract.getWhistPlayer() == null ? "N/A" : contract.getWhistPlayer())
+        System.out.println("Contract winners: " + contract.getContractWinners(teamNS, teamEW)
+                + ", Whist player: " + contract.getWhistPlayer()
                 + ", Contract: " + contract.getCurrentContract()
-                + ", lefts to take: " + (contract.getCurrentContract().equals("N/A") ? "0" : Contract.Bidding.getEnum(contract.getCurrentContract()).getCardsToWin())
-                + ", contract value: " + (contract.getCurrentContract().equals("N/A") ? "0" : contract.getActualContractValue(teamNS, teamEW)));
+                + ", lefts to take: " + contract.getCardsToWin()
+                + ", contract value: " + contract.getActualContractValue(teamNS, teamEW));
 
         System.out.println("Contract flow: " + contract.getContractFlow());
     }
