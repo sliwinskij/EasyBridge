@@ -7,13 +7,12 @@ import java.util.Random;
 
 public class Player {
     private final String name;
-    private int points;
     private final List<Deck.Card> playersDeck;
     private final String direction;
     private boolean pass = false;
 
 
-    public Player(String name, Deck deck, String direction) {
+    public Player(final String name, final Deck deck, final String direction) {
         this.name = name;
         this.playersDeck = dealCardsToPlayers(deck);
         Collections.sort(playersDeck);
@@ -24,7 +23,7 @@ public class Player {
         return pass;
     }
 
-    public void setPass(boolean pass) {
+    public void setPass(final boolean pass) {
         this.pass = pass;
     }
 
@@ -39,22 +38,22 @@ public class Player {
     public List<Deck.Card> getPlayersDeck() {
         return playersDeck;
     }
-    public int playerPoints(){
+    public int getPlayerPoints() {
         int sum = 0;
-        for (Deck.Card card : playersDeck){
-            if (card.getCardValue()<=10){
-                sum+=0;
+        for (Deck.Card card : playersDeck) {
+            if (card.getRankValue() <= 10) {
+                sum += 0;
             } else {
-                sum+=card.getCardValue()-10;
+                sum += card.getRankValue() - 10;
             }
         }
         return sum;
     }
 
-    private List<Deck.Card> dealCardsToPlayers(Deck deck){
+    private List<Deck.Card> dealCardsToPlayers(final Deck deck) {
         Random random = new Random();
         List<Deck.Card> playersDeck = new ArrayList<>();
-        for (int i=0; i<13; i++){
+        for (int i = 0; i < 13; i++) {
             int randomDeckCard = random.nextInt(deck.getDeck().size());
             playersDeck.add(deck.getDeck().get(randomDeckCard));
             deck.getDeck().remove(randomDeckCard);

@@ -8,7 +8,7 @@ public class Deck {
     private final List<Card> deck;
 
     public Deck() {
-        this.deck = new ArrayList<>(cardNames.values().length* cardSuits.values().length);
+        this.deck = new ArrayList<>(CardRanks.values().length * CardSuits.values().length);
         createADeck();
     }
 
@@ -16,92 +16,97 @@ public class Deck {
         return deck;
     }
 
-    public enum cardSuits {
-        Clubs(50),
-        Diamonds(100),
-        Hearts(150),
-        Spades(200);
+    public enum CardSuits {
+        Clubs(50, "♣"),
+        Diamonds(100, "♦"),
+        Hearts(150, "♥"),
+        Spades(200, "♠");
 
         private final int suitValue;
+        private final String suitName;
 
-        cardSuits(int suitValue){
-            this.suitValue=suitValue;
+        CardSuits(final int suitValue, final String suitName) {
+            this.suitValue = suitValue;
+            this.suitName = suitName;
         }
 
-        public int getSuitValue(){
+        public int getSuitValue() {
             return suitValue;
         }
+
+        public String getSuitName() {
+            return suitName;
+        }
     }
 
-    public enum cardNames {
-        Two(2),
-        Three(3),
-        Four(4),
-        Five(5),
-        Six(6),
-        Seven(7),
-        Eight(8),
-        Nine(9),
-        Ten(10),
-        Jack(11),
-        Queen(12),
-        King(13),
-        Ace(14);
+    public enum CardRanks {
+        Two(2, "2"),
+        Three(3, "3"),
+        Four(4, "4"),
+        Five(5, "5"),
+        Six(6, "6"),
+        Seven(7, "7"),
+        Eight(8, "8"),
+        Nine(9, "9"),
+        Ten(10, "10"),
+        Jack(11, "J"),
+        Queen(12, "Q"),
+        King(13, "K"),
+        Ace(14, "A");
 
         private final int cardValue;
+        private final String cardName;
 
-        cardNames(int cardValue){
-            this.cardValue=cardValue;
+        CardRanks(final int cardValue, final String cardName) {
+            this.cardValue = cardValue;
+            this.cardName = cardName;
         }
 
-        public int getCardValue(){
+        public int getCardValue() {
             return cardValue;
+        }
+
+        public String getCardName() {
+            return cardName;
         }
     }
 
 
-    public void createADeck(){
+    public void createADeck() {
         deck.clear();
-        for(cardSuits cardSuit : cardSuits.values()){
-            for (cardNames cardName : cardNames.values()){
-                deck.add(new Card(cardSuit, cardName));
+        for (CardSuits cardSuit : CardSuits.values()) {
+            for (CardRanks cardRank : CardRanks.values()) {
+                deck.add(new Card(cardRank, cardSuit));
             }
         }
         Collections.shuffle(deck);
     }
 
-    public static class Card implements Comparable<Card>{
-        private final cardSuits cardSuit;
-        private final cardNames cardName;
+    public static class Card implements Comparable<Card> {
+        private final CardSuits cardSuit;
+        private final CardRanks cardRank;
 
-        public Card(cardSuits cardSuit, cardNames cardName) {
+        public Card(final CardRanks cardRank, final CardSuits cardSuit) {
             this.cardSuit = cardSuit;
-            this.cardName = cardName;
+            this.cardRank = cardRank;
         }
 
-        public cardSuits getCardSuit() {
-            return cardSuit;
+        public int getRankValue() {
+            return cardRank.getCardValue();
         }
-
-        public cardNames getCardName() {
-            return cardName;
-        }
-
-        public int getCardValue(){
-            return cardName.getCardValue();
-        }
-        public int getSuitValue(){
+        public int getSuitValue() {
             return cardSuit.getSuitValue();
         }
 
         @Override
         public String toString() {
-            return cardName + " of " + cardSuit;
+            return cardRank.getCardName() + cardSuit.getSuitName();
         }
 
         @Override
-        public int compareTo(Card card) {
-            return Integer.compare(card.getSuitValue() + card.getCardValue(), this.getSuitValue() + this.getCardValue());
+        public int compareTo(final Card card) {
+            return Integer.compare(card.getSuitValue()
+                    + card.getRankValue(), this.getSuitValue() + this.getRankValue());
         }
     }
 
