@@ -175,18 +175,18 @@ public class Contract {
         //Determine the whist player:
         //one to the left of first player to bid on colour in actual contract.
         for (String flow : biddingFlow) {
-            if (contractPlayer.equals("N") || contractPlayer.equals("S")) {
-                if (flow.startsWith("N", 2) && flow.substring(6).equals(currentContract.substring(1))) {
+            if (contractPlayer.equalsIgnoreCase("N") || contractPlayer.equalsIgnoreCase("S")) {
+                if (flow.startsWith("N", 2) && flow.substring(6).equalsIgnoreCase(currentContract.substring(1))) {
                     return "E";
                 }
-                if (flow.startsWith("S", 2) && flow.substring(6).equals(currentContract.substring(1))) {
+                if (flow.startsWith("S", 2) && flow.substring(6).equalsIgnoreCase(currentContract.substring(1))) {
                     return "W";
                 }
-            } else if (contractPlayer.equals("E") || contractPlayer.equals("W")) {
-                if (flow.startsWith("E", 2) && flow.substring(6).equals(currentContract.substring(1))) {
+            } else if (contractPlayer.equalsIgnoreCase("E") || contractPlayer.equalsIgnoreCase("W")) {
+                if (flow.startsWith("E", 2) && flow.substring(6).equalsIgnoreCase(currentContract.substring(1))) {
                     return "S";
                 }
-                if (flow.startsWith("W", 2) && flow.substring(6).equals(currentContract.substring(1))) {
+                if (flow.startsWith("W", 2) && flow.substring(6).equalsIgnoreCase(currentContract.substring(1))) {
                     return "N";
                 }
             }

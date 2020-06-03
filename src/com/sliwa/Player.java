@@ -39,6 +39,7 @@ public class Player {
     public List<Deck.Card> getPlayersDeck() {
         return playersDeck;
     }
+    
     public int getPlayerPoints() {
         int sum = 0;
         for (Deck.Card card : playersDeck) {

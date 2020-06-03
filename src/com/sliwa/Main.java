@@ -167,7 +167,5 @@ public class Main {
                 contract.setContractStarted(true);
             }
         }
-
     }
-
 }
