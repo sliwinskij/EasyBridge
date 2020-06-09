@@ -6,6 +6,7 @@ public class Team {
     private final String name;
     private boolean versus;
     private boolean doubleVersus;
+    private int cardsCollected;
 
     public Team(Player player1, Player player2) {
         this.player1 = player1;
@@ -13,6 +14,7 @@ public class Team {
         this.name = player1.getDirection() + player2.getDirection();
         this.versus = false;
         this.doubleVersus = false;
+        this.cardsCollected = 0;
     }
 
     public boolean isPlayerInThisTeam(Player player) {
@@ -22,26 +24,24 @@ public class Team {
         return this.player2.getDirection().equals(player.getDirection());
     }
 
-//    public boolean isPlayerInThisTeam(final String playerDirection) {
-//        if (this.player1.getDirection().equals(playerDirection)) {
-//            return true;
-//        }
-//        return this.player2.getDirection().equals(playerDirection);
-//    }
-//
-//    public String getOtherPlayerDirection(Player player) {
-//        if (isPlayerInThisTeam(player)) {
-//            if (player1.getDirection().equals(player.getDirection())) {
-//                return player2.getDirection();
-//            }
-//        }
-//        if (isPlayerInThisTeam(player)) {
-//            if (player2.getDirection().equals(player.getDirection())) {
-//                return player1.getDirection();
-//            }
-//        }
-//        return null;
-//    }
+    public Player getDummyPlayer(Contract contract) {
+        if (contract.getContractWinners().equalsIgnoreCase(this.name)){
+            if (contract.getContractPlayer().equalsIgnoreCase(player1.getDirection())){
+                return player2;
+            }
+            if (contract.getContractPlayer().equalsIgnoreCase(player2.getDirection())){
+                return player1;
+            }
+        }
+        return null;
+    }
+
+    public boolean isPlayerInThisTeam(String playerDirection) {
+        if (this.player1.getDirection().equals(playerDirection)) {
+            return true;
+        }
+        return this.player2.getDirection().equals(playerDirection);
+    }
 
     public boolean isContractOnThisTeam(Contract contract) {
         if (contract.getContractPlayer().equals(player1.getDirection())) {
@@ -51,7 +51,7 @@ public class Team {
     }
 
     public void setVersus(boolean versus) {
-                this.versus = versus;
+        this.versus = versus;
     }
 
     public boolean isVersus() {
@@ -59,11 +59,19 @@ public class Team {
     }
 
     public void setDoubleVersus(boolean doubleVersus) {
-                this.doubleVersus = doubleVersus;
+        this.doubleVersus = doubleVersus;
     }
 
     public boolean isDoubleVersus() {
         return doubleVersus;
+    }
+
+    public int getCardsCollected() {
+        return cardsCollected;
+    }
+
+    public void setCardsCollected() {
+        this.cardsCollected++;
     }
 
     public String getName() {

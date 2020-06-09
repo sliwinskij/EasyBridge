@@ -7,6 +7,7 @@ public class Contract {
     private String currentContract;
     private boolean contractStarted;
     private String contractPlayer;
+    private String whistPlayer;
     //All bids
     private final List<String> contractFlow;
     //All bids except PASS, X, XX
@@ -19,6 +20,7 @@ public class Contract {
         this.contractPlayer = "";
         this.contractFlow = new ArrayList<>();
         this.biddingFlow = new ArrayList<>();
+        this.whistPlayer = "N/A";
     }
 
     public boolean isContractStarted() {
@@ -171,41 +173,43 @@ public class Contract {
         }
     }
 
-    public String getWhistPlayer() {
-        //Determine the whist player:
-        //one to the left of first player to bid on colour in actual contract.
+    public void setWhistPlayer() {
         for (String flow : biddingFlow) {
             if (contractPlayer.equalsIgnoreCase("N") || contractPlayer.equalsIgnoreCase("S")) {
                 if (flow.startsWith("N", 2) && flow.substring(6).equalsIgnoreCase(currentContract.substring(1))) {
-                    return "E";
+                    this.whistPlayer = "E";
                 }
                 if (flow.startsWith("S", 2) && flow.substring(6).equalsIgnoreCase(currentContract.substring(1))) {
-                    return "W";
+                    this.whistPlayer = "W";
                 }
             } else if (contractPlayer.equalsIgnoreCase("E") || contractPlayer.equalsIgnoreCase("W")) {
                 if (flow.startsWith("E", 2) && flow.substring(6).equalsIgnoreCase(currentContract.substring(1))) {
-                    return "S";
+                    this.whistPlayer = "S";
                 }
                 if (flow.startsWith("W", 2) && flow.substring(6).equalsIgnoreCase(currentContract.substring(1))) {
-                    return "N";
+                    this.whistPlayer = "N";
                 }
             }
         }
-        return "N/A";
+
     }
 
-    public String getContractWinners(Team teamNS, Team teamEW) {
+    public String getWhistPlayer() {
+        return whistPlayer;
+    }
+
+    public String getContractWinners() {
         if (contractPlayer.startsWith("N")) {
-            return teamNS.getName();
+            return "NS";
         }
         if (contractPlayer.startsWith("S")) {
-            return teamNS.getName();
+            return "NS";
         }
         if (contractPlayer.startsWith("E")) {
-            return teamEW.getName();
+            return "EW";
         }
         if (contractPlayer.startsWith("W")) {
-            return teamEW.getName();
+            return "EW";
         }
         return "N/A";
     }
@@ -235,7 +239,7 @@ public class Contract {
     }
 
     public int getCardsToWin() {
-        if (currentContract.equals("N/A")){
+        if (currentContract.equals("N/A")) {
             return 0;
         }
         return Bidding.getEnum(currentContract).getCardsToWin();

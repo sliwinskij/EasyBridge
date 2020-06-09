@@ -91,6 +91,10 @@ public class Deck {
             this.cardRank = cardRank;
         }
 
+        public CardSuits getCardSuit() {
+            return cardSuit;
+        }
+
         public int getRankValue() {
             return cardRank.getCardValue();
         }

@@ -59,7 +59,44 @@ public class Main {
                     Team teamEW = new Team(playerE, playerW);
 
                     //Bidding Phase
-                    biddingPhase(playerN, playerE, playerS, playerW, random, scanner, teamNS, teamEW);
+                    Contract contract = new Contract();
+                    biddingPhase(playerN, playerE, playerS, playerW, random, scanner, teamNS, teamEW, contract);
+
+                    //Play Phase
+                    PlayHand playHand = new PlayHand();
+                    System.out.println("Game starts now! Whist player: " + contract.getWhistPlayer() + " starts!");
+                    do {
+                        playHandPhase(playerN, contract, scanner, playHand, teamNS, teamEW);
+
+                        playHandPhase(playerE, contract, scanner, playHand, teamNS, teamEW);
+
+                        playHandPhase(playerS, contract, scanner, playHand, teamNS, teamEW);
+
+                        playHandPhase(playerW, contract, scanner, playHand, teamNS, teamEW);
+
+                    } while (playerN.getPlayersDeck().size() != 0 && playerE.getPlayersDeck().size() != 0
+                            && playerS.getPlayersDeck().size() != 0 && playerW.getPlayersDeck().size() != 0);
+
+
+                    if (contract.getContractWinners().equalsIgnoreCase(teamNS.getName())) {
+                        if (teamNS.getCardsCollected() >= contract.getCardsToWin()) {
+                            System.out.println("Winners: " + teamNS.getName() + " points: +" + contract.getActualContractValue(teamNS, teamEW) + " rounds won: " + teamNS.getCardsCollected());
+                            System.out.println("Losers: " + teamEW.getName() + " rounds won: " + teamEW.getCardsCollected());
+                        } else {
+                            System.out.println("Losers: " + teamNS.getName() + " points: -" + contract.getActualContractValue(teamNS, teamEW) + " rounds won: " + + teamNS.getCardsCollected());
+                            System.out.println("Winners: " + teamEW.getName() + " rounds won: " + teamEW.getCardsCollected());
+                        }
+                    }
+
+                    if (contract.getContractWinners().equalsIgnoreCase(teamEW.getName())) {
+                        if (teamEW.getCardsCollected() >= contract.getCardsToWin()) {
+                            System.out.println("Winners: " + teamEW.getName() + " points: +" + contract.getActualContractValue(teamNS, teamEW) + " rounds won: " + teamEW.getCardsCollected());
+                            System.out.println("Losers: " + teamNS.getName() + " rounds won: " + teamNS.getCardsCollected());
+                        } else {
+                            System.out.println("Losers: " + teamEW.getName() + " points: -" + contract.getActualContractValue(teamNS, teamEW) + " rounds won: " + + teamEW.getCardsCollected());
+                            System.out.println("Winners: " + teamNS.getName() + " rounds won: " + teamNS.getCardsCollected());
+                        }
+                    }
 
                     break;
                 default:
@@ -73,9 +110,9 @@ public class Main {
         System.out.println("2. Start Game");
     }
 
-    public static void biddingPhase(Player playerN, Player playerE, Player playerS, Player playerW, Random random, Scanner scanner, Team teamNS, Team teamEW) {
+    public static void biddingPhase(Player playerN, Player playerE, Player playerS, Player playerW, Random random, Scanner scanner, Team teamNS, Team teamEW, Contract contract) {
         int chooseStartingPlayer = random.nextInt(4);
-        Contract contract = new Contract();
+
         System.out.println("Bidding starts now!");
         while (true) {
             playBid(playerN, chooseStartingPlayer, contract, scanner, 0, teamNS, teamEW);
@@ -115,7 +152,8 @@ public class Main {
             }
         }
 
-        System.out.println("Contract winners: " + contract.getContractWinners(teamNS, teamEW)
+        contract.setWhistPlayer();
+        System.out.println("Contract winners: " + contract.getContractWinners()
                 + ", Whist player: " + contract.getWhistPlayer()
                 + ", Contract: " + contract.getCurrentContract()
                 + ", lefts to take: " + contract.getCardsToWin()
@@ -166,6 +204,79 @@ public class Main {
             if (!contract.isContractStarted()) {
                 contract.setContractStarted(true);
             }
+        }
+    }
+
+    public static void playHandPhase(Player player, Contract contract, Scanner scanner, PlayHand playHand, Team teamNS, Team teamEW) {
+        if ((player.getDirection().equalsIgnoreCase(contract.getWhistPlayer()) && playHand.getRoundWinningPlayer().equalsIgnoreCase("") && !playHand.isPlayHandStarted())
+                || (playHand.getRoundWinningPlayer().equalsIgnoreCase(player.getDirection()) && !playHand.isPlayHandStarted())
+                || playHand.isPlayHandStarted()) {
+            boolean valid;
+            int playChoice = 0;
+            int offset;
+            Player dummyPlayer = null;
+            System.out.println("Contract: " + contract.getCurrentContract());
+            if (contract.getContractWinners().equalsIgnoreCase("NS")) {
+                dummyPlayer = teamNS.getDummyPlayer(contract);
+            }
+
+            if (contract.getContractWinners().equalsIgnoreCase("EW")) {
+                dummyPlayer = teamEW.getDummyPlayer(contract);
+            }
+
+            if (playHand.isShowDummyCards() && dummyPlayer != null && dummyPlayer.getPlayersDeck().size() > 0) {
+                System.out.println("Dummy's cards: " + dummyPlayer.getPlayersDeck());
+            }
+
+            if (dummyPlayer == null || !player.getDirection().equalsIgnoreCase(dummyPlayer.getDirection())) {
+                System.out.println("Your hand: " + player.getPlayersDeck());
+            }
+
+            System.out.println("Player " + player.getDirection() + " choose your action:");
+            if (!playHand.isPlayHandStarted()) {
+                playHand.setRoundSuit(null);
+                playHand.setRoundWinningCard(null);
+                playHand.setRoundWinningPlayer("N/A");
+            }
+
+            offset = player.showPlayersDeckMenu(playHand);
+
+            //Choice validation
+            do {
+                if (scanner.hasNextInt()) {
+                    playChoice = scanner.nextInt();
+                    scanner.nextLine();
+                        if (playHand.getRoundSuit() != null && playHand.getRoundSuit().equals(Deck.CardSuits.Clubs)
+                                && playChoice <= player.getClubsDeck().size() && player.getClubsDeck().size() > 0) {
+                            valid = true;
+                        } else if (playHand.getRoundSuit() != null && playHand.getRoundSuit().equals(Deck.CardSuits.Diamonds)
+                                && playChoice <= player.getDiamondsDeck().size() && player.getDiamondsDeck().size() > 0) {
+                            valid = true;
+                        } else if (playHand.getRoundSuit() != null && playHand.getRoundSuit().equals(Deck.CardSuits.Hearts)
+                                && playChoice <= player.getHeartsDeck().size() && player.getHeartsDeck().size() > 0) {
+                            valid = true;
+                        } else if (playHand.getRoundSuit() != null && playHand.getRoundSuit().equals(Deck.CardSuits.Spades)
+                                && playChoice <= player.getSpadesDeck().size() && player.getSpadesDeck().size() > 0) {
+                            valid = true;
+                        } else if (playChoice >= 1 && playChoice <= player.getPlayersDeck().size()
+                                && (playHand.getRoundSuit() == null
+                                || (playHand.getRoundSuit().equals(Deck.CardSuits.Clubs) && player.getClubsDeck().size() == 0)
+                                || (playHand.getRoundSuit().equals(Deck.CardSuits.Diamonds) && player.getDiamondsDeck().size() == 0)
+                                || (playHand.getRoundSuit().equals(Deck.CardSuits.Hearts) && player.getHeartsDeck().size() == 0)
+                                || playHand.getRoundSuit().equals(Deck.CardSuits.Spades) && player.getSpadesDeck().size() == 0)) {
+                            valid = true;
+                        } else {
+                        valid = false;
+                        System.out.println("Enter a valid number!");
+                    }
+                } else {
+                    scanner.nextLine();
+                    valid = false;
+                    System.out.println("Enter a valid number!");
+                }
+            } while (!valid);
+
+            playHand.regulatePlayHand(player, playChoice + offset, contract, teamNS, teamEW);
         }
     }
 }
