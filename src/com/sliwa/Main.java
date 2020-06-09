@@ -83,7 +83,7 @@ public class Main {
                             System.out.println("Winners: " + teamNS.getName() + " points: +" + contract.getActualContractValue(teamNS, teamEW) + " rounds won: " + teamNS.getCardsCollected());
                             System.out.println("Losers: " + teamEW.getName() + " rounds won: " + teamEW.getCardsCollected());
                         } else {
-                            System.out.println("Losers: " + teamNS.getName() + " points: -" + contract.getActualContractValue(teamNS, teamEW) + " rounds won: " + + teamNS.getCardsCollected());
+                            System.out.println("Losers: " + teamNS.getName() + " points: -" + contract.getActualContractValue(teamNS, teamEW) + " rounds won: " + teamNS.getCardsCollected());
                             System.out.println("Winners: " + teamEW.getName() + " rounds won: " + teamEW.getCardsCollected());
                         }
                     }
@@ -93,7 +93,7 @@ public class Main {
                             System.out.println("Winners: " + teamEW.getName() + " points: +" + contract.getActualContractValue(teamNS, teamEW) + " rounds won: " + teamEW.getCardsCollected());
                             System.out.println("Losers: " + teamNS.getName() + " rounds won: " + teamNS.getCardsCollected());
                         } else {
-                            System.out.println("Losers: " + teamEW.getName() + " points: -" + contract.getActualContractValue(teamNS, teamEW) + " rounds won: " + + teamEW.getCardsCollected());
+                            System.out.println("Losers: " + teamEW.getName() + " points: -" + contract.getActualContractValue(teamNS, teamEW) + " rounds won: " + teamEW.getCardsCollected());
                             System.out.println("Winners: " + teamNS.getName() + " rounds won: " + teamNS.getCardsCollected());
                         }
                     }

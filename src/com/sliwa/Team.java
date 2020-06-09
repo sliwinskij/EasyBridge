@@ -25,11 +25,11 @@ public class Team {
     }
 
     public Player getDummyPlayer(Contract contract) {
-        if (contract.getContractWinners().equalsIgnoreCase(this.name)){
-            if (contract.getContractPlayer().equalsIgnoreCase(player1.getDirection())){
+        if (contract.getContractWinners().equalsIgnoreCase(this.name)) {
+            if (contract.getContractPlayer().equalsIgnoreCase(player1.getDirection())) {
                 return player2;
             }
-            if (contract.getContractPlayer().equalsIgnoreCase(player2.getDirection())){
+            if (contract.getContractPlayer().equalsIgnoreCase(player2.getDirection())) {
                 return player1;
             }
         }

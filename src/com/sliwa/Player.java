@@ -91,43 +91,40 @@ public class Player {
                 if (playersDeck.get(i).getCardSuit().equals(playHand.getRoundSuit())) {
                     System.out.print(orderNumber + ". " + playersDeck.get(i) + "\n");
                     orderNumber++;
-                    if (!alreadyExecuted){
+                    if (!alreadyExecuted) {
                         offset = i;
                         alreadyExecuted = true;
                     }
                 }
             }
-        }
-        else if (playHand.getRoundSuit() != null && playHand.getRoundSuit().getSuitName().equalsIgnoreCase("♦") && diamondsDeck.size() > 0) {
+        } else if (playHand.getRoundSuit() != null && playHand.getRoundSuit().getSuitName().equalsIgnoreCase("♦") && diamondsDeck.size() > 0) {
             for (int i = 0; i < playersDeck.size(); i++) {
                 if (playersDeck.get(i).getCardSuit().equals(playHand.getRoundSuit())) {
                     System.out.print(orderNumber + ". " + playersDeck.get(i) + "\n");
                     orderNumber++;
-                    if (!alreadyExecuted){
+                    if (!alreadyExecuted) {
                         offset = i;
                         alreadyExecuted = true;
                     }
                 }
             }
-        }
-        else if (playHand.getRoundSuit() != null && playHand.getRoundSuit().getSuitName().equalsIgnoreCase("♥") && heartsDeck.size() > 0) {
+        } else if (playHand.getRoundSuit() != null && playHand.getRoundSuit().getSuitName().equalsIgnoreCase("♥") && heartsDeck.size() > 0) {
             for (int i = 0; i < playersDeck.size(); i++) {
                 if (playersDeck.get(i).getCardSuit().equals(playHand.getRoundSuit())) {
                     System.out.print(orderNumber + ". " + playersDeck.get(i) + "\n");
                     orderNumber++;
-                    if (!alreadyExecuted){
+                    if (!alreadyExecuted) {
                         offset = i;
                         alreadyExecuted = true;
                     }
                 }
             }
-        }
-        else if (playHand.getRoundSuit() != null && playHand.getRoundSuit().getSuitName().equalsIgnoreCase("♠") && spadesDeck.size() > 0) {
+        } else if (playHand.getRoundSuit() != null && playHand.getRoundSuit().getSuitName().equalsIgnoreCase("♠") && spadesDeck.size() > 0) {
             for (int i = 0; i < playersDeck.size(); i++) {
                 if (playersDeck.get(i).getCardSuit().equals(playHand.getRoundSuit())) {
                     System.out.print(orderNumber + ". " + playersDeck.get(i) + "\n");
                     orderNumber++;
-                    if (!alreadyExecuted){
+                    if (!alreadyExecuted) {
                         offset = i;
                         alreadyExecuted = true;
                     }
